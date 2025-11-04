@@ -68,8 +68,7 @@ public class FactoryThread extends Thread {
                 totalCreated += productsCreated;
                 unshippedProducts += productsCreated;
                 
-                System.out.printf("%s >> %s >> get %d materials %s balance = %d\n",
-                                Thread.currentThread().getName(),
+                System.out.printf("%s >> get %d materials %s balance = %d\n",
                                 Thread.currentThread().getName(),
                                 materialsGot,
                                 warehouse.getName(),
@@ -82,8 +81,7 @@ public class FactoryThread extends Thread {
                 totalShipped += productsShipped;
                 unshippedProducts -= productsShipped;
                 
-                System.out.printf("%s >> %s >> ship %d products %s capacity = %d\n",
-                                Thread.currentThread().getName(),
+                System.out.printf("%s >> ship %d products %s capacity = %d\n",
                                 Thread.currentThread().getName(),
                                 productsShipped,
                                 freight.getName(),

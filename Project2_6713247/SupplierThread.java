@@ -46,8 +46,7 @@ public class SupplierThread extends Thread {
                 
                 warehouse.put(amount);
                 
-                System.out.printf("%s >> %s >> put %d materials %s balance = %d\n",
-                                Thread.currentThread().getName(),
+                System.out.printf("%s >> put %d materials %s balance = %d\n",
                                 Thread.currentThread().getName(),
                                 amount,
                                 warehouse.getName(),

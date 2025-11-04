@@ -67,7 +67,7 @@ public class MainClass {
                 break;
             } catch (FileNotFoundException e) {
                 System.out.println("java.io.FileNotFoundException: " + configFilename);
-                System.out.print("New file name = ");
+                System.out.println("New file name = ");
                 String newFilename = scanner.nextLine().trim();
                 configFilename = "Project2_6713247/" + newFilename;//Github
                 //configFilename = "src/main/java/Project2_6713247/" + newFilename;//Netbeans
@@ -109,12 +109,24 @@ public class MainClass {
     }
     
     private void printParameters() {
+        System.out.println(Thread.currentThread().getName() + "  >>  " + "=".repeat(20) + "Parameters" + "=".repeat(20));
+        System.out.println(Thread.currentThread().getName() + "  >>  " + "Days of simulation : " + days);
+        System.out.println(Thread.currentThread().getName() + "  >>  " + "Warehouses         : " + warehouseNum);
+        System.out.println(Thread.currentThread().getName() + "  >>  " + "Freights           : " + freightNum);
+        System.out.println(Thread.currentThread().getName() + "  >>  " + "Freight capacity   : max = " + freightMaxCapacity);
+        System.out.println(Thread.currentThread().getName() + "  >>  " + "SupplierThreads    : " + supplierNum);
+        System.out.println(Thread.currentThread().getName() + "  >>  " + "Daily supplier     : min = " + supplierMin + ", " + "max =" + supplierMax);
+        System.out.println(Thread.currentThread().getName() + "  >>  " + "FactoryThreads     : " + factoryNum);
+        System.out.println(Thread.currentThread().getName() + "  >>  " + "Daily product      : max = " + factoryMax);
+        System.out.println(Thread.currentThread().getName() + "  >>  ");
+        /*
         System.out.printf("%s >> Parameters\n", Thread.currentThread().getName());
         System.out.printf("%s >> Days: %d\n", Thread.currentThread().getName(), days);
         System.out.printf("%s >> Warehouses: %d\n", Thread.currentThread().getName(), warehouseNum);
         System.out.printf("%s >> Freights: %d (max %d)\n", Thread.currentThread().getName(), freightNum, freightMaxCapacity);
         System.out.printf("%s >> Suppliers: %d (supply %d-%d/day)\n", Thread.currentThread().getName(), supplierNum, supplierMin, supplierMax);
         System.out.printf("%s >> Factories: %d (max %d/day)\n\n", Thread.currentThread().getName(), factoryNum, factoryMax);
+        */
     }
     
     private void createAndStartThreads() throws Exception {
@@ -142,17 +154,18 @@ public class MainClass {
         }
         
         for (int day = 1; day <= days; day++) {
-            System.out.printf("%s >> Day %d\n", Thread.currentThread().getName(), day);
+            System.out.printf("%s  >>  " + "=".repeat(52)+"\n", Thread.currentThread().getName());
+            System.out.printf("%s  >>  Day %d\n", Thread.currentThread().getName(), day);
             
             for (Warehouse w : warehouses) {
-                System.out.printf("%s >> %s balance = %d\n", Thread.currentThread().getName(), w.getName(), w.getBalance());
+                System.out.printf("%s  >>  %s balance = %d\n", Thread.currentThread().getName(), w.getName(), w.getBalance());
             }
             
             for (Freight f : freights) {
                 f.reset();
-                System.out.printf("%s >> %s capacity = %d\n", Thread.currentThread().getName(), f.getName(), f.getCapacity());
+                System.out.printf("%s  >>  %s capacity = %d\n", Thread.currentThread().getName(), f.getName(), f.getCapacity());
             }
-            System.out.printf("%s >>\n", Thread.currentThread().getName());
+            System.out.printf("%s  >>  \n", Thread.currentThread().getName());
             
             dayStartBarrier.await();
             dayEndBarrier.await();
@@ -171,12 +184,12 @@ public class MainClass {
             return f1.getName().compareTo(f2.getName());
         });
         
-        System.out.printf("%s >>\n", Thread.currentThread().getName());
-        System.out.printf("%s >> Summary\n", Thread.currentThread().getName());
+        System.out.printf("%s  >>  \n", Thread.currentThread().getName());
+        System.out.printf("%s  >>  Summary\n", Thread.currentThread().getName());
         
         for (FactoryThread f : factories) {
-            System.out.printf("%s >> %s total = %d, shipped = %d (%.2f%%)\n",
-                Thread.currentThread().getName(), f.getName(),
+            System.out.printf("%s  >>  total = %d, shipped = %d (%.2f%%)\n",
+                Thread.currentThread().getName(),
                 f.getTotalCreated(), f.getTotalShipped(), f.getShipPercentage());
         }
     }
