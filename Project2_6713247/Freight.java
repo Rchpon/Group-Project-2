@@ -33,4 +33,7 @@ public class Freight {
         capacity -= actual;
         return actual;
     }
+     public String toString() {
+        return name;
+    }
 }

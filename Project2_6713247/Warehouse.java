@@ -31,4 +31,7 @@ public class Warehouse {
         balance -= actual;
         return actual;
     }
+    public String toString() {
+        return name;
+    }
 }
