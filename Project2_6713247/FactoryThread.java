@@ -15,6 +15,10 @@ public class FactoryThread extends Thread {
     private CyclicBarrier dayStartBarrier;
     private CyclicBarrier dayEndBarrier;
     private CyclicBarrier supplierDoneBarrier;
+    private CyclicBarrier putDoneBarrier;      
+    private CyclicBarrier getDoneBarrier;    
+    private CyclicBarrier totalDoneBarrier;   
+    private CyclicBarrier shipDoneBarrier;
     private Random random;
     
     private int unshippedProducts;
@@ -25,7 +29,11 @@ public class FactoryThread extends Thread {
                          ArrayList<Freight> freights, int maxProduction, int days,
                          CyclicBarrier dayStartBarrier,
                          CyclicBarrier dayEndBarrier,
-                         CyclicBarrier supplierDoneBarrier) {
+                         CyclicBarrier supplierDoneBarrier,
+                         CyclicBarrier putDoneBarrier,    
+                         CyclicBarrier getDoneBarrier,     
+                         CyclicBarrier totalDoneBarrier, 
+                         CyclicBarrier shipDoneBarrier) {
         super(name);
         this.warehouses = warehouses;
         this.freights = freights;
@@ -34,6 +42,10 @@ public class FactoryThread extends Thread {
         this.dayStartBarrier = dayStartBarrier;
         this.dayEndBarrier = dayEndBarrier;
         this.supplierDoneBarrier = supplierDoneBarrier;
+        this.putDoneBarrier = putDoneBarrier;        
+        this.getDoneBarrier = getDoneBarrier;      
+        this.totalDoneBarrier = totalDoneBarrier;  
+        this.shipDoneBarrier = shipDoneBarrier;            
         this.random = new Random();
         this.unshippedProducts = 0;
         this.totalCreated = 0;
@@ -68,12 +80,13 @@ public class FactoryThread extends Thread {
                 totalCreated += productsCreated;
                 unshippedProducts += productsCreated;
                 
-                System.out.printf("%s >> get %d materials %s balance = %d\n",
+                System.out.printf(" %s  >>  get %d materials %s balance = %d\n",
                                 Thread.currentThread().getName(),
                                 materialsGot,
                                 warehouse.getName(),
                                 warehouse.getBalance());
-                
+                putDoneBarrier.await();
+
                 int freightIndex = random.nextInt(freights.size());
                 Freight freight = freights.get(freightIndex);
                 int productsShipped = freight.ship(unshippedProducts);
@@ -81,11 +94,27 @@ public class FactoryThread extends Thread {
                 totalShipped += productsShipped;
                 unshippedProducts -= productsShipped;
                 
-                System.out.printf("%s >> ship %d products %s capacity = %d\n",
-                                Thread.currentThread().getName(),
-                                productsShipped,
-                                freight.getName(),
-                                freight.getCapacity());
+                //System.out.printf("%s >>\n", Thread.currentThread().getName());
+
+                System.out.printf(" %s  >>  total products to ship = %d\n",
+                Thread.currentThread().getName(),
+                unshippedProducts);
+
+                totalDoneBarrier.await();
+
+                System.out.printf(" %s  >>  ship %d products %s remaining capacity = %d\n",
+                Thread.currentThread().getName(),
+                productsShipped,
+                freight.getName(),
+                freight.getCapacity());
+                                
+                getDoneBarrier.await();
+
+                System.out.printf(" %s  >>  unshipped products = %d\n",
+                Thread.currentThread().getName(),
+                unshippedProducts);
+
+                shipDoneBarrier.await();
                 
                 dayEndBarrier.await();
                 
