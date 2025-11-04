@@ -105,8 +105,8 @@ public class Project2Main {
                     }
                 }
 
-                System.out.println("Configuration loaded successfully!");
-                System.out.println("days = " + days);
+                System.out.println("main >> =========== Parameters ============");
+                System.out.println("main >> Days of simulation : " + days);
                 System.out.println("warehouse_num = " + warehouseNum);
                 System.out.println("freight_num_max = " + freightNum + ", " + freightMax);
                 System.out.println("supplier_num_min_max = " + supplierNum + ", " + supplierMin + ", " + supplierMax);
